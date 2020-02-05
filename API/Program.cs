@@ -22,7 +22,7 @@ namespace API
         {
           var context = services.GetRequiredService<DataContext>();
           context.Database.Migrate();
-          Seed.SeedData(context);
+          Seed.SeedData(context); // Seed data: advantage, if anything goes wrong, just drop database and rebuild
         }
         catch (Exception e)
         {
