@@ -25,26 +25,26 @@ namespace Application.Activities
       private readonly DataContext _context;
       public Handler(DataContext context)
       {
-        this._context = context;
-
+        _context = context;
       }
+
       public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
       {
-        var activity = new Activity()
+        var activity = new Activity
         {
-            Id = request.Id,
-            Title = request.Title,
-            Description = request.Description,
-            Category = request.Category,
-            Date = request.Date,
-            City = request.City,
-            Venue = request.Venue
+          Id = request.Id,
+          Title = request.Title,
+          Description = request.Description,
+          Category = request.Category,
+          Date = request.Date,
+          City = request.City,
+          Venue = request.Venue
         };
 
         _context.Activities.Add(activity);
         var success = await _context.SaveChangesAsync() > 0;
 
-        if(success) return Unit.Value;
+        if (success) return Unit.Value;
 
         throw new Exception("Problem saving changes");
       }

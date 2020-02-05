@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, Image, Button } from "semantic-ui-react";
-import { IActivity } from "../../../app/modules/activity";
+import { IActivity } from "../../../app/models/activity";
 
 interface IProps {
   activity: IActivity;
@@ -8,7 +8,7 @@ interface IProps {
   setSelectedActivity: (activity: IActivity | null) => void;
 }
 
-export const ActivityDetails: React.FC<IProps> = ({
+const ActivityDetails: React.FC<IProps> = ({
   activity,
   setEditMode,
   setSelectedActivity
@@ -32,3 +32,5 @@ export const ActivityDetails: React.FC<IProps> = ({
     </Card>
   );
 };
+
+export default ActivityDetails;

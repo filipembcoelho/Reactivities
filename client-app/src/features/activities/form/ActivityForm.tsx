@@ -1,24 +1,27 @@
 import React, { useState, FormEvent } from "react";
 import { Segment, Form, Button } from "semantic-ui-react";
-import { IActivity } from "../../../app/modules/activity";
+import { IActivity } from '../../../app/models/activity';
 import { v4 as uuid } from "uuid";
 
 interface IProps {
-  activity: IActivity;
   setEditMode: (editMode: boolean) => void;
+  activity: IActivity;
   createActivity: (activity: IActivity) => void;
   editActivity: (activity: IActivity) => void;
+  submitting: boolean;
 }
 
-export const ActivityForm: React.FC<IProps> = ({
+const ActivityForm: React.FC<IProps> = ({
   setEditMode,
   activity: initialFormState,
+  editActivity,
   createActivity,
-  editActivity
+  submitting
 }) => {
   const initializeForm = () => {
-    if (initialFormState) return initialFormState;
-    else
+    if (initialFormState) {
+      return initialFormState;
+    } else {
       return {
         id: "",
         title: "",
@@ -28,6 +31,7 @@ export const ActivityForm: React.FC<IProps> = ({
         city: "",
         venue: ""
       };
+    }
   };
 
   const [activity, setActivity] = useState<IActivity>(initializeForm);
@@ -51,7 +55,7 @@ export const ActivityForm: React.FC<IProps> = ({
 
   return (
     <Segment clearing>
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <Form.Input
           onChange={handleInputChange}
           name='title'
@@ -90,15 +94,11 @@ export const ActivityForm: React.FC<IProps> = ({
           placeholder='Venue'
           value={activity.venue}
         />
-        <Button
-          onClick={() => handleSubmit()}
-          floated='right'
-          positive
-          type='submit'
-          content='Submit'
-        />
+        <Button loading={submitting} floated='right' positive type='submit' content='Submit' />
         <Button onClick={() => setEditMode(false)} floated='right' type='button' content='Cancel' />
       </Form>
     </Segment>
   );
 };
+
+export default ActivityForm;
