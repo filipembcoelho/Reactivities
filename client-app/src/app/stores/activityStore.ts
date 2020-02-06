@@ -35,24 +35,23 @@ class ActivityStore {
     }
   }
 
-  @action LoadActivity = async (id: string) => {
+  @action loadActivity = async (id: string) => {
     let activity = this.getActivity(id);
     if (activity) {
       this.activity = activity;
-    }
-    else {
+    } else {
       this.loadingInitial = true;
       try {
         activity = await agent.Activities.details(id);
         runInAction('getting activity', () => {
           this.activity = activity;
-        });
-      } catch (error) {
-        console.log(error);
-      } finally {
-        runInAction('getting activity finally', () => {
           this.loadingInitial = false;
-        });
+        })
+      } catch (error) {
+        runInAction('get activity error', () => {
+          this.loadingInitial = false;
+        })
+        console.log(error);
       }
     }
   }

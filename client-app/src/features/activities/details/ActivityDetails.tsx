@@ -13,19 +13,19 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({ match, h
   const activityStore = useContext(ActivityStore);
   const {
     activity,
-    LoadActivity,
+    loadActivity,
     loadingInitial
   } = activityStore;
 
   useEffect(() => {
-    LoadActivity(match.params.id);
-  }, [LoadActivity, match.params.id]);
+    loadActivity(match.params.id);
+  }, [loadActivity, match.params.id]);
 
   if(loadingInitial || !activity) return <LoadingComponent content='Loading activity...' />
 
   return (
     <Card fluid>
-      <Image src={`assets/categoryImages/${activity.category}.jpg`} wrapped ui={false} />
+      <Image src={`/assets/categoryImages/${activity!.category}.jpg`} wrapped ui={false} />
       <Card.Content>
         <Card.Header>{activity!.title}</Card.Header>
         <Card.Meta>

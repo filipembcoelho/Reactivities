@@ -17,7 +17,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({ match, hist
     editActivity,
     submitting,
     activity: initialFormState,
-    LoadActivity,
+    loadActivity,
     clearActivity
   } = activityStore;
 
@@ -33,12 +33,12 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({ match, hist
 
   useEffect(() => {
     if (match.params.id && activity.id.length === 0) {
-      LoadActivity(match.params.id).then(() => initialFormState && setActivity(initialFormState));
+      loadActivity(match.params.id).then(() => initialFormState && setActivity(initialFormState));
     }
     return () => {
       clearActivity();
     };
-  }, [LoadActivity, clearActivity, match.params.id, initialFormState, activity.id.length]);
+  }, [loadActivity, clearActivity, match.params.id, initialFormState, activity.id.length]);
 
   const handleSubmit = () => {
     if (activity.id.length === 0) {
