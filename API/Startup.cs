@@ -2,6 +2,7 @@ using System.Text;
 using API.Middleware;
 using Application.Activities;
 using Application.Interfaces;
+using AutoMapper;
 using Domain;
 using FluentValidation.AspNetCore;
 using Infrastructure.Security;
@@ -35,6 +36,7 @@ namespace API
     {
       services.AddDbContext<DataContext>(options =>
       {
+        options.UseLazyLoadingProxies();
         options.UseSqlite(Configuration.GetConnectionString("Default"));
       });
 
@@ -57,7 +59,11 @@ namespace API
         });
       });
 
+      // MediatR
       services.AddMediatR(typeof(List.Handler).Assembly);
+
+      // AutoMapper
+      services.AddAutoMapper(typeof(List.Handler).Assembly);
 
       // Identity/Authentication services
       var builder = services.AddIdentityCore<AppUser>();
@@ -65,6 +71,16 @@ namespace API
       identityBuilder.AddEntityFrameworkStores<DataContext>();
       identityBuilder.AddSignInManager<SignInManager<AppUser>>();
       // services.AddAuthentication();
+
+      // Custom Auth policy
+      services.AddAuthorization(opt =>
+      {
+        opt.AddPolicy("IsActivityHost", policy =>
+        {
+          policy.Requirements.Add(new IsHostRequirement());
+        });
+      });
+      services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
 
       // Add Authentication for Jwt Authentication
 
@@ -81,7 +97,6 @@ namespace API
           ValidateIssuer = false
         };
       });
-
 
       // JwtGenerator
       services.AddScoped<IJwtGenerator, JwtGenerator>();
